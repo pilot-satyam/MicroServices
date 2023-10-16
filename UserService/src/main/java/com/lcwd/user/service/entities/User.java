@@ -33,6 +33,6 @@ public class User {
     @Column(name = "ABOUT")
     private String about;
 
-     @Transient
+    @Transient
     private List<Rating> ratings = new ArrayList<>(); //To tell not to save these details in DB
    }

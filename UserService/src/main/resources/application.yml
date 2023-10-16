@@ -12,4 +12,85 @@ spring:
         hibernate:
             ddl-auto: update
         show-sql: true
+
+    application:
+        name: USER-SERVICE
+    
+    config:
+        import: configserver:http://localhost:8085
+
+    security:
+        oauth2:
+            resourceserver:
+                jwt:
+                    issuer-uri: https://dev-68516699.okta.com/oauth2/default
+
+            client:
+                registration: 
+                    internal-client:
+                        provider: okta
+                        authorization-grant-type: client_credentials
+                        scope: internal
+                        client-id:  0oac26wjhcjplU6cQ5d7
+                        client-secret:  GCv7zanlYsRTsIKiy_1zfDlfbV-u27UjTbSKHhx1_Ud91i5IWuv2dM2BXwPY3kXn
+
+                provider:
+                    okta:
+                        issuer-uri: https://dev-68516699.okta.com/oauth2/default
+
+# eureka:
+#     instance:
+#         prefer-ip-address: true
+#     client: 
+#         fetch-registry: true
+#         register-with-eureka: true
+#         service-url: 
+#             defaultZone: http://localhost:8761/eureka
+
+management:
+    health:
+        circuitbreakers: 
+            enabled: true
+    endpoints: 
+        web:
+            exposure: 
+                include: health
+
+    endpoint:
+        health:
+            show-details: always
+
+resilience4j:
+    circuitbreaker:
+        instances:
+            ratingHotelBreaker:
+                registerHealthIndicator: true
+                eventConsumerBufferSize: 10
+                failureRateThreshold: 50
+                minimumNumberOfCalls: 5
+                automaticTransitionFromOpenToHalfOpenEnabled: True
+                waitDurationInOpenState: 6s
+                permittedNumberOfCallsInHalfOpenState: 3
+                slidingWindowSize: 10
+                slidingWindowType: COUNT_BASED
+
+    retry:
+        instances:
+            ratingHotelService:
+                max-attempts: 3
+                wait-duration: 3s
+
+    rateLimiter:
+        instances: 
+            userRateLimiter:
+                limit-refresh-period: 4s
+                limit-for-period: 2
+                timeout-duration: 0s
+
+okta:
+    oauth2:
+        issuer: https://dev-68516699.okta.com/oauth2/default
+        audience:   api://default
+       
+
         
