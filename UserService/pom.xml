@@ -53,11 +53,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-config</artifactId>
-   		</dependency>
-
 		 <dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -69,17 +64,40 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.okta.spring</groupId>
+			<artifactId>okta-spring-boot-starter</artifactId>
+			<version>3.0.5</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.okta.spring/okta-spring-sdk -->
+		<dependency>
+			<groupId>com.okta.spring</groupId>
+			<artifactId>okta-spring-sdk</artifactId>
+			<version>3.0.5</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.okta.sdk/okta-sdk-api -->
+		<dependency>
+			<groupId>com.okta.sdk</groupId>
+			<artifactId>okta-sdk-api</artifactId>
+			<version>14.0.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.okta.sdk/okta-sdk-impl -->
+		<dependency>
+			<groupId>com.okta.sdk</groupId>
+			<artifactId>okta-sdk-impl</artifactId>
+			<scope>runtime</scope>
+			<version>14.0.0</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.okta.spring</groupId>
-			<artifactId>okta-spring-boot-starter</artifactId>
-			<version>3.0.5</version>
 		</dependency>
 
 		<dependency>
