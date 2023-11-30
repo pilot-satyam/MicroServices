@@ -2,17 +2,19 @@
 
  import com.fasterxml.jackson.core.type.TypeReference;
  import com.fasterxml.jackson.databind.ObjectMapper;
- import com.lcwd.user.service.entities.Group;
- import com.lcwd.user.service.entities.Role;
+//  import com.lcwd.user.service.entities.Group;
+import com.lcwd.user.service.entities.GroupUser;
+import com.lcwd.user.service.entities.Role;
  import org.springframework.beans.factory.annotation.Autowired;
  import org.springframework.beans.factory.annotation.Value;
  import org.springframework.http.*;
  import org.springframework.stereotype.Service;
 
- import com.lcwd.user.service.repositories.GroupRepo;
- import com.lcwd.user.service.repositories.RoleRepo;
+//  import com.lcwd.user.service.repositories.GroupRepo;
+import com.lcwd.user.service.repositories.GroupUserRepo;
+import com.lcwd.user.service.repositories.RoleRepo;
 
- import com.okta.sdk.client.Clients;
+//  import com.okta.sdk.client.Clients;
 
  import jakarta.annotation.PostConstruct;
  import org.springframework.web.client.RestTemplate;
@@ -33,14 +35,14 @@
  @Service
  public class OktaService {
 
-     @Value("00Zfzc-Vfc7FnNTlW4_dT_36-Re7CjD7Ec6RT4Feub")
+     @Value("00AebMAfXer8ZxaeXLpRRIoi0XZjbekwu6Ub-sJDY8")
      private String oktaApiToken;
 
      @Autowired
      private RoleRepo roleRepo;
 
      @Autowired
-     private GroupRepo groupRepo;
+     private GroupUserRepo groupRepo;
 
 
      @PostConstruct
@@ -57,31 +59,31 @@
 //             roleRepo.save(new Role(role.getProfile().getName()));
 //         }
 
-         ResponseEntity<String> rolesResponse = new RestTemplate().exchange(
-                 "https://https://dev-68516699-admin.okta.com/api/v1/roles",
-                 HttpMethod.GET,
-                 new HttpEntity<>(headers),
-                 String.class
-         );
+        //  ResponseEntity<String> rolesResponse = new RestTemplate().exchange(
+        //          "https://dev-68516699-admin.okta.com/api/v1/roles",
+        //          HttpMethod.GET,
+        //          new HttpEntity<>(headers),
+        //          String.class
+        //  );
 
          //Process rolesResponse and save roles to db
 
-         ObjectMapper objectMapper = new ObjectMapper();
-         try {
-             //parsing json response to extract roles data
-             List<Map<String, Object>> rolesData = objectMapper.readValue(rolesResponse.getBody(), new TypeReference<List<Map<String, Object>>>() {
-             });
+        //  ObjectMapper objectMapper = new ObjectMapper();
+        //  try {
+        //      //parsing json response to extract roles data
+        //      List<Map<String, Object>> rolesData = objectMapper.readValue(rolesResponse.getBody(), new TypeReference<List<Map<String, Object>>>() {
+        //      });
 
-             //Map roles  data and save to db
-             for (Map<String, Object> roleData : rolesData) {
-                 String roleName = (String) roleData.get("name");
-                 //Create a RoleEntity object and save it using the repository
-                 Role roleEntity = new Role(roleName);
-                 roleRepo.save(roleEntity);
-             }
-         }catch (IOException e){
-             e.printStackTrace();
-         }
+        //      //Map roles  data and save to db
+        //      for (Map<String, Object> roleData : rolesData) {
+        //          String roleName = (String) roleData.get("name");
+        //          //Create a RoleEntity object and save it using the repository
+        //          Role roleEntity = new Role(roleName);
+        //          roleRepo.save(roleEntity);
+        //      }
+        //  }catch (IOException e){
+        //      e.printStackTrace();
+        //  }
 
          //Fetch groups from okta
 //         GroupList groups = client.listGroups();
@@ -89,8 +91,10 @@
 //             groupRepo.save(new Group(group.getProfile().getName()));
 //         }
 
+//fetching groups
+
          ResponseEntity<String> groupResponse = new RestTemplate().exchange(
-                 "https://https://dev-68516699-admin.okta.com/api/v1/groups",
+                 "https://dev-68516699-admin.okta.com/api/v1/groups",
                  HttpMethod.GET,
                  new HttpEntity<>(headers),
                  String.class
@@ -106,7 +110,7 @@
              for(Map<String,Object> groupData: groupsData){
                  String groupName = (String) groupData.get("name");
                  //Create a Group Entity object and save it using repo
-                 Group groupEntity = new Group(groupName);
+                 GroupUser groupEntity = new GroupUser(groupName);
                  groupRepo.save(groupEntity);
              }
          } catch (IOException e){

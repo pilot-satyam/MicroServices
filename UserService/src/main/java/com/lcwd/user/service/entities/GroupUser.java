@@ -4,23 +4,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 @Entity
-@Getter
-@Setter
-public class Group {
+@Data
+public class GroupUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String groupName;
 
-    public Group(){}
+    public GroupUser(){}
 
-    public Group(String groupName) {
+    public GroupUser(String groupName){
         this.groupName = groupName;
     }
 }
-

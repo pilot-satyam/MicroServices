@@ -3,8 +3,9 @@ package com.lcwd.user.service.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.lcwd.user.service.entities.Role;
+import com.lcwd.user.service.entities.GroupUser;
 
 @Repository
-public interface RoleRepo extends JpaRepository<Role, Long>{   
+public interface GroupUserRepo extends JpaRepository<GroupUser, Long> {
+    
 }
