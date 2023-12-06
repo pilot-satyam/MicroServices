@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.lcwd.user.service.entities.GroupUser;
 
 @Repository
-public interface GroupUserRepo extends JpaRepository<GroupUser, Long> {
+public interface GroupUserRepo extends JpaRepository<GroupUser, String> {
     
 }

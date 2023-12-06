@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.lcwd.user.service.entities.Role;
 
 @Repository
-public interface RoleRepo extends JpaRepository<Role, Long>{   
+public interface RoleRepo extends JpaRepository<Role, String>{   
 }
