@@ -1,6 +1,6 @@
- package com.lcwd.user.service.services;
+package com.lcwd.user.service.services;
 
- import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -9,20 +9,20 @@ import com.lcwd.user.service.entities.Role;
 import com.lcwd.user.service.entities.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
- import org.springframework.beans.factory.annotation.Value;
- import org.springframework.http.*;
- import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
 
- import com.lcwd.user.service.repositories.GroupUserRepo;
+import com.lcwd.user.service.repositories.GroupUserRepo;
 import com.lcwd.user.service.repositories.RoleRepo;
 import com.lcwd.user.service.repositories.UserRepository;
 
 import jakarta.annotation.PostConstruct;
- import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestTemplate;
 
- import java.io.IOException;
- import java.util.List;
- import java.util.Map;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
  @Service
  public class OktaService {
@@ -115,21 +115,21 @@ import jakarta.annotation.PostConstruct;
             e.printStackTrace();
       }
 
-      //CRUD
+      //CRUD Operations
         
         String apiUrl = "https://dev-68516699-admin.okta.com/api/v1/users?activate=false";
         HttpHeaders headers3 = new HttpHeaders();
         headers3.set("Authorization", "SSWS " + oktaApiKey);
         headers3.setContentType(MediaType.APPLICATION_JSON);
         String groupId = "00gdgw8j7fc1gahSJ5d7";
-        String requestBody = "{ \"profile\": { \"firstName\": \"Isaac\", \"lastName\": \"Brock\", \"email\": \"isaac@gmail.com\", \"login\": \"isaac@gmail.com\" }, \"groupIds\": [\"" + groupId + "\"]}";
+        String requestBody = "{ \"profile\": { \"firstName\": \"Isaac\", \"lastName\": \"Brock\", \"email\": \"isaac17@gmail.com\", \"login\": \"isaac17@gmail.com\" }, \"groupIds\": [\"" + groupId + "\"]}";
         System.out.println("Request Body: " + requestBody);
         HttpEntity<String> request = new HttpEntity<>(requestBody, headers3);
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
 
-        if (response.getStatusCode() == HttpStatus.CREATED) {
+        if (response.getStatusCode() == HttpStatus.OK) {
             try {
                 // Parse the response body to get user details
                 ObjectMapper objectMapper3 = new ObjectMapper();
@@ -146,11 +146,10 @@ import jakarta.annotation.PostConstruct;
                 newUser.setName(firstName);
                 // newUser.setLastName(lastName);
                 newUser.setEmail(email);
-
                 userRepo.save(newUser);
-
                 System.out.println("User created and saved successfully!");
-            } catch (Exception e) {
+            } 
+            catch (Exception e) {
                 System.out.println("Error processing response: " + e.getMessage());
             }
         } else {
