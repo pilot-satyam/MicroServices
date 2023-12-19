@@ -1,10 +1,12 @@
  package com.lcwd.user.service.services;
 
  import com.fasterxml.jackson.core.type.TypeReference;
- import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.lcwd.user.service.entities.GroupUser;
 import com.lcwd.user.service.entities.Role;
+import com.lcwd.user.service.entities.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
  import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
  import com.lcwd.user.service.repositories.GroupUserRepo;
 import com.lcwd.user.service.repositories.RoleRepo;
+import com.lcwd.user.service.repositories.UserRepository;
 
 import jakarta.annotation.PostConstruct;
  import org.springframework.web.client.RestTemplate;
@@ -32,6 +35,9 @@ import jakarta.annotation.PostConstruct;
     
      @Autowired
      private RoleRepo roleRepo;
+
+     @Autowired
+     private UserRepository userRepo;
 
      @PostConstruct
      public void syncOktaData() {
@@ -108,5 +114,47 @@ import jakarta.annotation.PostConstruct;
         } catch (IOException e) {
             e.printStackTrace();
       }
-     }
+
+      //CRUD
+        
+        String apiUrl = "https://dev-68516699-admin.okta.com/api/v1/users?activate=false";
+        HttpHeaders headers3 = new HttpHeaders();
+        headers3.set("Authorization", "SSWS " + oktaApiKey);
+        headers3.setContentType(MediaType.APPLICATION_JSON);
+        String groupId = "00gdgw8j7fc1gahSJ5d7";
+        String requestBody = "{ \"profile\": { \"firstName\": \"Isaac\", \"lastName\": \"Brock\", \"email\": \"isaac@gmail.com\", \"login\": \"isaac@gmail.com\" }, \"groupIds\": [\"" + groupId + "\"]}";
+        System.out.println("Request Body: " + requestBody);
+        HttpEntity<String> request = new HttpEntity<>(requestBody, headers3);
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
+
+        if (response.getStatusCode() == HttpStatus.CREATED) {
+            try {
+                // Parse the response body to get user details
+                ObjectMapper objectMapper3 = new ObjectMapper();
+                JsonNode jsonNode = objectMapper3.readTree(response.getBody());
+
+                String oktaId = jsonNode.get("id").asText();
+                String firstName = jsonNode.get("profile").get("firstName").asText();
+                // String lastName = jsonNode.get("profile").get("lastName").asText();
+                String email = jsonNode.get("profile").get("email").asText();
+
+                // Create a User instance and save it to the database
+                User newUser = new User();
+                newUser.setUserId(oktaId);
+                newUser.setName(firstName);
+                // newUser.setLastName(lastName);
+                newUser.setEmail(email);
+
+                userRepo.save(newUser);
+
+                System.out.println("User created and saved successfully!");
+            } catch (Exception e) {
+                System.out.println("Error processing response: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Failed to create user. Status code: " + response.getStatusCodeValue());
+        }
+    }
  }
