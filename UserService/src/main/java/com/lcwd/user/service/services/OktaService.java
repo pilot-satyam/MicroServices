@@ -122,7 +122,7 @@ import java.util.Map;
         headers3.set("Authorization", "SSWS " + oktaApiKey);
         headers3.setContentType(MediaType.APPLICATION_JSON);
         String groupId = "00gdgw8j7fc1gahSJ5d7";
-        String requestBody = "{ \"profile\": { \"firstName\": \"Isaac\", \"lastName\": \"Brock\", \"email\": \"isaac17@gmail.com\", \"login\": \"isaac17@gmail.com\" }, \"groupIds\": [\"" + groupId + "\"]}";
+        String requestBody = "{ \"profile\": { \"firstName\": \"Isaac\", \"lastName\": \"Brock\", \"email\": \"isaac18@gmail.com\", \"login\": \"isaac18@gmail.com\" }, \"groupIds\": [\"" + groupId + "\"]}";
         System.out.println("Request Body: " + requestBody);
         HttpEntity<String> request = new HttpEntity<>(requestBody, headers3);
         RestTemplate restTemplate = new RestTemplate();
