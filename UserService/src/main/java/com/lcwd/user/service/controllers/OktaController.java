@@ -33,14 +33,14 @@ public class OktaController {
         headers.set("Authorization", "SSWS " + apiToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String requestBody = "{ \"profile\": { \"firstName\": \"Isaac\", \"lastName\": \"Brock\", \"email\": \"isaac@gmail.com\", \"login\": \"isaac@gmail.com\" }, \"groupIds\": \"00gdgw8j7fc1gahSJ5d7\"}";
+        String requestBody = "{ \"profile\": { \"firstName\": \"Isaac\", \"lastName\": \"Brock\", \"email\": \"isaac18@gmail.com\", \"login\": \"isaac18@gmail.com\" }, \"groupIds\": \"00gdgw8j7fc1gahSJ5d7\"}";
 
         HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
 
-        if (response.getStatusCode() == HttpStatus.CREATED) {
+        if (response.getStatusCode() == HttpStatus.OK) {
             try {
                 // Parse the response body to get user details
                 ObjectMapper objectMapper = new ObjectMapper();
