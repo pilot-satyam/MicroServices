@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 // import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +39,7 @@ public class OktaController {
     private final String apiUrl = "https://dev-68516699-admin.okta.com/api/v1/users?activate=false";
     private final String apiToken = "00Zfzc-Vfc7FnNTlW4_dT_36-Re7CjD7Ec6RT4Feub";
 
+    //CREATE Request
     @PostMapping("/create")
     public ResponseEntity<String> createUser(@RequestBody RequestBodyStructure requestBody) {
         HttpHeaders headers = new HttpHeaders();
@@ -109,12 +111,6 @@ public class OktaController {
                     updatedUser.setEmail(requestBody.getProfile().getEmail());
                     userRepository.save(updatedUser);
                 }
-                // Process the response if necessary
-                // JsonNode jsonNode = objectMapper.readTree(response.getBody());
-                // String updatedId = jsonNode.get("id").asText();
-                // String updatedName = jsonNode.get("profile").get("firstName").asText();
-                // String email = jsonNode.get("profile").get("email").asText();
-
                 return ResponseEntity.ok("User updated successfully!");
             } else {
                 return ResponseEntity.status(response.getStatusCode()).body("Failed to update user. Status code: " + response.getStatusCodeValue());
@@ -123,6 +119,38 @@ public class OktaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing request: " + e.getMessage());
         }
     }
+
+     //DELETE Request
+        String deleteUrl = "https://dev-68516699-admin.okta.com/api/v1/users";
+        @DeleteMapping("/delete/{userId}")
+        public ResponseEntity<String> deleteUser(@PathVariable String userId){
+            String deleteUserUrl = deleteUrl + "/"+userId;
+            HttpHeaders headers5 = new HttpHeaders();
+            headers5.set("Authorization","SSWS "+apiToken);
+            headers5.setContentType(MediaType.APPLICATION_JSON);
+            try{
+                //deleting user from okta
+                HttpEntity<String> requestEntity = new HttpEntity<>(null,headers5);
+                RestTemplate restTemplate2 = new RestTemplate();
+                ResponseEntity<String> oktaResponse = restTemplate2.exchange(
+                    deleteUserUrl,
+                    HttpMethod.DELETE,
+                    requestEntity,
+                    String.class
+                );
+                if(oktaResponse.getStatusCode() == HttpStatus.NO_CONTENT){
+                    //delete from local db
+                    userRepository.deleteById(userId);
+                    return ResponseEntity.ok("User deleted from Okta and local DB!!!");
+                }
+                else{
+                    return ResponseEntity.status(oktaResponse.getStatusCode()).body("Failed to delete from Okta. Status Code: "+oktaResponse.getStatusCodeValue());
+                }
+            }
+            catch(Exception e){
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Deleting User: "+e.getMessage());
+            }
+        }
 
     @Data
     static class RequestBodyStructure {
