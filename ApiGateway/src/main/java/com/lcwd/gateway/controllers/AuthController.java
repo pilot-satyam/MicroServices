@@ -21,12 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lcwd.gateway.models.AuthResponse;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/v1")
 public class AuthController {
 
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    @GetMapping("/login")
+    @GetMapping("/sso")
     public ResponseEntity<AuthResponse> login(
         @RegisteredOAuth2AuthorizedClient("okta") OAuth2AuthorizedClient client,
         @AuthenticationPrincipal OidcUser user,

@@ -35,9 +35,12 @@ eureka:
 okta:
     oauth2:
         issuer: https://dev-68516699.okta.com/oauth2/default
+        # issuer: https://regeneron.okta.com/oauth2/default
         audience:   api://default
         client-id:  0oac26wjhcjplU6cQ5d7
         client-secret:  GCv7zanlYsRTsIKiy_1zfDlfbV-u27UjTbSKHhx1_Ud91i5IWuv2dM2BXwPY3kXn
+        # client-id: 0oadjd2wq7QVdjXja5d7
+        # client-secret: MR8u5gQ-7amKczqtU_Ga7dJmitjQ2FLbmZ9TSXktFJXZnLABz49AZKEKNrhGwtNu
         scopes: openid, profile, email, offline_access
 
 
